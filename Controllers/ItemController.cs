@@ -44,15 +44,23 @@ namespace RankingAppNET6.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ItemModel>> DeleteItem(int id)
+        public async Task<ActionResult<List<ItemModel>>> Delete(int id)
         {
+
             var item = await _context.ItemModels.FindAsync(id);
             if (item == null)
-            {
                 return BadRequest("Movie not found.");
-            }
-            return Ok(item);
+            
+
+            _context.ItemModels.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.ItemModels.ToListAsync());
+
+
         }
+
+
 
     }
 
